@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最初の1行をクリップボードにコピー</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            box-sizing: border-box;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .message {
+            margin-top: 10px;
+            color: #2e7d32;
+            font-weight: bold;
+            min-height: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>テキストペースト領域</h2>
+    <p>ここに複数行のテキストをペーストすると、自動的に最初の1行だけがクリップボードにコピーされます。</p>
+    <p>Kindleで教科書のSQLをコピーしたときに、余計な文章が付いてくるので、このWebページを活用しましょう。</p>
+
+    <textarea id="pasteArea" placeholder="ここにペーストしてください..."></textarea>
+    <div id="statusMessage" class="message"></div>
+
+    <script>
+        const pasteArea = document.getElementById('pasteArea');
+        const statusMessage = document.getElementById('statusMessage');
+
+        pasteArea.addEventListener('paste', (event) => {
+            // クリップボードから貼り付けられたプレーンテキストを取得
+            const pastedText = (event.clipboardData || window.clipboardData).getData('text');
+
+            if (!pastedText) return;
+
+            // 最初の1行を取得（\r\n または \n で分割し、先頭要素を取得）
+            const firstLine = pastedText.split(/\r?\n/)[0];
+
+            // 取得した最初の1行を再びクリップボードに書き込み
+            navigator.clipboard.writeText(firstLine).then(() => {
+                statusMessage.textContent = `「${firstLine}」をクリップボードにコピーしました！`;
+            }).catch(err => {
+                console.error('クリップボードへの書き込みに失敗しました:', err);
+                statusMessage.textContent = 'コピーに失敗しました。';
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+name: postgres-server-and-client
+
+services:
+  server:
+    image: postgres:18.4
+    container_name: server
+    environment:
+      - POSTGRES_USER=user1
+      - POSTGRES_PASSWORD=user1
+      - POSTGRES_DB=mydb
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks:
+      postgres-network:
+        ipv4_address: 192.168.1.11
+  client:
+    image: alpine/psql:18.4
+    container_name: client
+    depends_on:
+      - server
+    environment:
+      - PGPASSWORD=user1
+    command: ["psql", "-h", "192.168.1.11", "-U", "user1", "-d", "mydb"]
+    tty: true # コンテナを起動させたままにする
+    restart: always
+    networks:
+      postgres-network:
+        ipv4_address: 192.168.1.12
+volumes:
+  pgdata:
+networks:
+  postgres-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.0/24
