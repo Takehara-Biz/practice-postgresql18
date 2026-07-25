@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:18.4
+    working_dir: /app
+    container_name: tx-iso-level
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_db
+    ports:
+      - "5432:5432"
+    volumes:
+      # Postgres18では、dataまでマウントするとコンテナ起動時にエラーが発生するので、その上のフォルダまでマウントする。
+      #- postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
+      - ./volumes/app:/app
+volumes:
+  postgres_data:
+
