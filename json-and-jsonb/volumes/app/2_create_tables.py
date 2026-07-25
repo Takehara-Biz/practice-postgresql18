@@ -30,6 +30,19 @@ CREATE TABLE company_jsonb (
 );
 """
 
+CREATE_JSONB_INDEX_TABLE = """
+-- 企業情報テーブル with index
+CREATE TABLE company_jsonb_index (
+    id SERIAL PRIMARY KEY,
+    company_name VARCHAR(100) NOT NULL,
+    prefecture VARCHAR(100) NOT NULL,
+    industry VARCHAR(50) NOT NULL,
+    details JSONB
+);
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX idx_jsonb_genre ON company_jsonb_index USING gin ((details->>'ジャンル') gin_trgm_ops);
+"""
+
 def create_tables():
     try:
         # PostgreSQLに接続
@@ -45,6 +58,7 @@ def create_tables():
         # テーブル作成
         cursor.execute(CREATE_JSON_TABLE)
         cursor.execute(CREATE_JSONB_TABLE)
+        cursor.execute(CREATE_JSONB_INDEX_TABLE)
 
         # コミットして接続を閉じる
         conn.commit()

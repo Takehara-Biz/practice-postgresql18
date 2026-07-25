@@ -132,6 +132,17 @@ def insert_data():
             ),
         )
 
+        # company_jsonb_index (JSONB型のテーブル with index) への挿入
+        cursor.execute(
+            "INSERT INTO company_jsonb_index (company_name, prefecture, industry, details) VALUES (%s, %s, %s, %s)",
+            (
+                record["company_name"],
+                record["prefecture"],
+                record["industry"],
+                json.dumps(record["details"]),
+            ),
+        )
+
     conn.commit()
     cursor.close()
     conn.close()

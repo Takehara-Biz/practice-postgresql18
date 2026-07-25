@@ -31,7 +31,7 @@ def measure_query_speed(table_name, condition):
 
 # 検索条件とテーブル
 condition = "和食"  # 飲食業のジャンルを条件とする
-tables = ["company_json", "company_jsonb"]
+tables = ["company_json", "company_jsonb", "company_jsonb_index"]
 
 
 def main():
