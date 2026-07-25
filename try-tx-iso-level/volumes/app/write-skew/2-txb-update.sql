@@ -1,5 +1,4 @@
 BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE; -- SEIALIZABLEならWRITE SKEWを防げる。
-SELECT * from doctors;
 UPDATE doctors SET on_call = false WHERE id = 2;
 SELECT * from doctors;
 COMMIT;

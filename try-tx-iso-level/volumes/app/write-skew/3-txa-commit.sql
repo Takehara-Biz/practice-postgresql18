@@ -1,2 +1,2 @@
 SELECT * from doctors;
-ROLLBACK;
+COMMIT;
